@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>API GET Example</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th, td {
+        text-align: left;
+        padding: 8px;
+        border: 1px solid black;
+      }
+
+      th {
+        background-color: #4CAF50;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="getData()">Obtener datos</button>
+    <br><br>
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
+    <script>
+      function getData() {
+        const options = {
+          method: 'GET',
+          headers: {
+            accept: 'application/json',
+            Token: '52c946d1fe0852b93081a9fa3e3c01826d710bcc807f525d65604ebce445649a'
+          }
+        };
+
+        fetch('https://api.qase.io/v1/defect/SG001?status=open&limit=10&offset=0', options)
+          .then(response => response.json())
+          .then(data => {
+            const table = document.getElementById("dataTable");
+            const tbody = table.querySelector("tbody");
+            tbody.innerHTML = "";
+
+            data.forEach(row => {
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td>${row.id}</td>
+                <td>${row.title}</td>
+                <td>${row.description}</td>
+                <td>${row.status}</td>
+              `;
+              tbody.appendChild(tr);
+            });
+          })
+          .catch(err => console.error(err));
+      }
+    </script>
+  </body>
+</html>
